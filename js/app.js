@@ -64,11 +64,11 @@ const showListItemDetails =  async(categoryID, category_name) =>{
         // Adding details in the card body
         cadrDiv.innerHTML = `
         <div class="card mb-4 shadow-lg">
-            <div class="row g-0">
+            <div class="row">
                 <div class="col-md-3">
                     <img src="${thumbnail_url}" alt="...">
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-8 ms-md-5">
                     <div class="card-body">
                         <h5 class="card-title">${title}</h5>
                         <p class="card-text">${details.length > 600 ? details.slice(0,600) + '<span class="ms-5 fw-semibold">...read more</span>' : details}</p>
