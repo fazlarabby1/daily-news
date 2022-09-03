@@ -32,30 +32,43 @@ const displayCategory = async () =>{
     });
 }
 
-const showListItemDetails =  (categoryID) =>{
+const showListItemDetails =  async(categoryID) =>{
     // console.log(categoryID);
     const url = `https://openapi.programming-hero.com/api/news/category/${categoryID}`;
-    // try{
-    //     const res = await fetch(url);
-    //     const data = await res.json();
-    //     const itemsArray =  data.data;
-    //     // console.log(itemsArray)
-    //     return itemsArray
-    // }
-    // catch{
-    //     error=> console.log(error);
-    // }
-
-    // const newsCards = document.getElementById('news-cards');
     fetch(url)
     .then(res => res.json())
     .then(data => displayNews(data.data))
     const  newsCards= document.getElementById('news-cards');
+    newsCards.textContent = "";
     const displayNews = (items) =>{
         // const itemsArray = data.data;
         items.forEach(item => {
-        // console.log(item)
+        console.log(item);
+        const {thumbnail_url, title, details, rating, author, total_view} = item;
         const cadrDiv = document.createElement('div');
+        cadrDiv.innerHTML = `
+        <div class="card mb-4 shadow-lg">
+            <div class="row g-0">
+                <div class="col-md-3">
+                    <img src="${thumbnail_url}" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">${title}</h5>
+                        <p class="card-text">${details.length > 600 ? details.slice(0,600) + '<span class="ms-5 fw-semibold">...read more</span>' : details}</p>
+                    </div>
+                    <div class="card-body bg-white d-flex justify-content-around align-items-center">
+                        <p class="text-dark"><img class="rounded rounded-circle" style="width: 40px; height: 40px" src="${author.img}" alt="..."> ${author.name ? author.name : 'N/A'}</p>
+                        <p class="text-dark"><i class="fa-regular fa-eye me-3"></i>${total_view}</p>
+                        <p class="text-dark"><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star me-3"></i> ${rating.number}</p>
+                        <p class= "btn btn-primary"><i class="fa-solid fa-arrow-right"></i></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+        newsCards.appendChild(cadrDiv);
+        
 
     });
     }
