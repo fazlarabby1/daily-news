@@ -1,4 +1,5 @@
 document.getElementById('load-spinner').style.display = 'none';
+document.getElementById('bottom').style.display= 'none';
 // Fetching category from the API link
 const loadCategory = async() =>{
     const url = `https://openapi.programming-hero.com/api/news/categories`;
@@ -36,6 +37,7 @@ const showListItemDetails =  async(categoryID, category_name) =>{
     .then(data => displayNews(data.data))
     document.getElementById('load-spinner').style.display = 'block';
     document.getElementById('spinner-section').style.height = '25rem';
+    document.getElementById('bottom').style.display= 'block';
     const  newsCards= document.getElementById('news-cards');
     newsCards.textContent = "";
     const displayNews = (items) =>{
@@ -46,12 +48,12 @@ const showListItemDetails =  async(categoryID, category_name) =>{
         const totalNews = document.getElementById('total-news');
         if(items.length > 0){
             totalNews.innerHTML = `
-            <h2 class="px-5 py-2">${items.length} Items found for category ${category_name}</h2>
+            <h3 class="px-5 py-2">${items.length} Items found for category ${category_name}</h3>
         `;
         }
         else{
             totalNews.innerHTML=`
-            <h2 class="px-5 py-2">Sorry!! No items available for category ${category_name}</h2>
+            <h3 class="px-5 py-2">Sorry!! No items available for category ${category_name}</h3>
             `
         }
         items.forEach(item => {
