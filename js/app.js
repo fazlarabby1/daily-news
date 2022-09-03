@@ -32,6 +32,7 @@ const displayCategory = async () =>{
 // News Details inside card body
 const showListItemDetails =  async(categoryID, category_name) =>{
     const url = `https://openapi.programming-hero.com/api/news/category/${categoryID}`;
+
     fetch(url)
     .then(res => res.json())
     .then(data => displayNews(data.data))
@@ -56,9 +57,14 @@ const showListItemDetails =  async(categoryID, category_name) =>{
             <h3 class="px-5 py-2">Sorry!! No items available for category ${category_name}</h3>
             `
         }
+        // Sort
+        console.log(items)
+        items.sort((a,b) =>{
+            return b.total_view - a.total_view;
+        });
         items.forEach(item => {
         // console.log(item);
-        const {thumbnail_url, title, details, rating, author, total_view} = item;
+        const {thumbnail_url, title, details, rating, author, total_view, _id} = item;
         const cadrDiv = document.createElement('div');
 
         // Adding details in the card body
@@ -77,7 +83,7 @@ const showListItemDetails =  async(categoryID, category_name) =>{
                         <p class="text-dark"><img class="rounded rounded-circle" style="width: 40px; height: 40px" src="${author.img}" alt="..."> ${author.name ? author.name : 'N/A'}</p>
                         <p class="text-dark"><i class="fa-regular fa-eye me-3"></i>${total_view ? total_view : 'N/A'}</p>
                         <p class="text-dark"><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star me-3"></i> ${rating.number}</p>
-                        <button type="button" class="btn btn-primary" onclick='showModal("${thumbnail_url}" , "${title}")' data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <button type="button" class="btn btn-primary" onclick='showModal("${thumbnail_url}" , "${title}", "${_id}")' data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <i class="fa-solid fa-arrow-right"></i>
                         </button>
                     </div>
@@ -91,13 +97,22 @@ const showListItemDetails =  async(categoryID, category_name) =>{
 }
 
 // Modal Body
-const showModal = (thumbnail_url, title) =>{
-    // console.log(thumbnail_url, title);
-    const modalDetails = document.getElementById('modal-details');
-    modalDetails.textContent = "";
-    modalDetails.innerHTML=`
-    <img src="${thumbnail_url}" />
-    <h5 class="modal-title">${title}</h5>
-    `;
+const showModal = (thumbnail_url, title, _id) =>{
+    console.log(thumbnail_url, title, _id);
+    const url = `https://openapi.programming-hero.com/api/news/${_id}`;
+    fetch(url)
+    .then(res => res.json())
+    .then(data => modalBody(data.data[0]))
+    const modalBody = (info) =>{
+        console.log(info)
+        const {thumbnail_url, title, details} = info;
+        const modalDetails = document.getElementById('modal-details');
+        modalDetails.textContent = "";
+        modalDetails.innerHTML=`
+            <img src="${thumbnail_url}" />
+            <h5 class="modal-title">${title}</h5>
+            <p>${details}</p>
+        `
+    }
 }
 displayCategory();
