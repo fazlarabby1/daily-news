@@ -20,7 +20,7 @@ const displayCategory = async () =>{
         li.classList.add("nav-item");
         li.classList.add("ms-5");
         li.innerHTML = `
-        <a class="nav-link" onclick="showListItemDetails('${category.category_id}')" aria-current="page" href="#">${category.category_name}</a>
+        <a class="nav-link" onclick="showListItemDetails('${category.category_id}', '${category.category_name}')" aria-current="page" href="#">${category.category_name}</a>
         `;
         navBarList.appendChild(li);
         
@@ -28,7 +28,7 @@ const displayCategory = async () =>{
 }
 
 // News Details inside card body
-const showListItemDetails =  async(categoryID) =>{
+const showListItemDetails =  async(categoryID, category_name) =>{
     const url = `https://openapi.programming-hero.com/api/news/category/${categoryID}`;
     fetch(url)
     .then(res => res.json())
@@ -36,6 +36,20 @@ const showListItemDetails =  async(categoryID) =>{
     const  newsCards= document.getElementById('news-cards');
     newsCards.textContent = "";
     const displayNews = (items) =>{
+        // console.log(items.length)
+
+        // //Showing total news found result
+        const totalNews = document.getElementById('total-news');
+        if(items.length > 0){
+            totalNews.innerHTML = `
+            <h2 class="px-5 py-2">${items.length} Items found for category ${category_name}</h2>
+        `;
+        }
+        else{
+            totalNews.innerHTML=`
+            <h2 class="px-5 py-2">Sorry!! No items available for category ${category_name}</h2>
+            `
+        }
         items.forEach(item => {
         // console.log(item);
         const {thumbnail_url, title, details, rating, author, total_view} = item;
