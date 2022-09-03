@@ -1,3 +1,4 @@
+document.getElementById('load-spinner').style.display = 'none';
 // Fetching category from the API link
 const loadCategory = async() =>{
     const url = `https://openapi.programming-hero.com/api/news/categories`;
@@ -33,10 +34,13 @@ const showListItemDetails =  async(categoryID, category_name) =>{
     fetch(url)
     .then(res => res.json())
     .then(data => displayNews(data.data))
+    document.getElementById('load-spinner').style.display = 'block';
+    document.getElementById('spinner-section').style.height = '25rem';
     const  newsCards= document.getElementById('news-cards');
     newsCards.textContent = "";
     const displayNews = (items) =>{
-        // console.log(items.length)
+        document.getElementById('load-spinner').style.display = 'none';
+        document.getElementById('spinner-section').style.height = 0;
 
         // //Showing total news found result
         const totalNews = document.getElementById('total-news');
@@ -54,6 +58,7 @@ const showListItemDetails =  async(categoryID, category_name) =>{
         // console.log(item);
         const {thumbnail_url, title, details, rating, author, total_view} = item;
         const cadrDiv = document.createElement('div');
+
         // Adding details in the card body
         cadrDiv.innerHTML = `
         <div class="card mb-4 shadow-lg">
@@ -83,7 +88,7 @@ const showListItemDetails =  async(categoryID, category_name) =>{
     }
 }
 
-
+// Modal Body
 const showModal = (thumbnail_url, title) =>{
     // console.log(thumbnail_url, title);
     const modalDetails = document.getElementById('modal-details');
