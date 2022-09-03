@@ -22,7 +22,7 @@ const displayCategory = async () =>{
         li.classList.add("nav-item");
         li.classList.add("ms-5");
         li.innerHTML = `
-        <a class="nav-link" onclick="showListItemDetails('${category.category_id}', '${category.category_name}')" aria-current="page" href="#">${category.category_name}</a>
+        <a class="nav-link" onclick="showListItemDetails('${category.category_id}', '${category.category_name}'), this.style.color='red'" aria-current="page" href="#">${category.category_name}</a>
         `;
         navBarList.appendChild(li);
         
@@ -32,7 +32,6 @@ const displayCategory = async () =>{
 // News Details inside card body
 const showListItemDetails =  async(categoryID, category_name) =>{
     const url = `https://openapi.programming-hero.com/api/news/category/${categoryID}`;
-
     fetch(url)
     .then(res => res.json())
     .then(data => displayNews(data.data))
@@ -57,13 +56,12 @@ const showListItemDetails =  async(categoryID, category_name) =>{
             <h3 class="px-5 py-2">Sorry!! No items available for category ${category_name}</h3>
             `
         }
-        // Sort
+        // Sort by most viewd news 
         console.log(items)
         items.sort((a,b) =>{
             return b.total_view - a.total_view;
         });
         items.forEach(item => {
-        // console.log(item);
         const {thumbnail_url, title, details, rating, author, total_view, _id} = item;
         const cadrDiv = document.createElement('div');
 
@@ -115,4 +113,5 @@ const showModal = (thumbnail_url, title, _id) =>{
         `
     }
 }
+
 displayCategory();
