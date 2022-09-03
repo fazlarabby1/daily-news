@@ -9,18 +9,13 @@ const loadCategory = async() =>{
     catch{
         error => console.error(error);
     }
-    // fetch(url)
-    // .then(res => res.json())
-    // .then(data => displayCategory(data.data.news_category))
 }
 
 // Showing category in the menu list
 const navBarList = document.getElementById('navbarItems');
 const displayCategory = async () =>{
     const data = await loadCategory()
-    // console.log(data);
     data.forEach(category => {
-        // console.log(category.category_name);
         const li = document.createElement('li');
         li.classList.add("nav-item");
         li.classList.add("ms-5");
@@ -32,8 +27,8 @@ const displayCategory = async () =>{
     });
 }
 
+// News Details inside card body
 const showListItemDetails =  async(categoryID) =>{
-    // console.log(categoryID);
     const url = `https://openapi.programming-hero.com/api/news/category/${categoryID}`;
     fetch(url)
     .then(res => res.json())
@@ -41,11 +36,11 @@ const showListItemDetails =  async(categoryID) =>{
     const  newsCards= document.getElementById('news-cards');
     newsCards.textContent = "";
     const displayNews = (items) =>{
-        // const itemsArray = data.data;
         items.forEach(item => {
-        console.log(item);
+        // console.log(item);
         const {thumbnail_url, title, details, rating, author, total_view} = item;
         const cadrDiv = document.createElement('div');
+        // Adding details in the card body
         cadrDiv.innerHTML = `
         <div class="card mb-4 shadow-lg">
             <div class="row g-0">
@@ -59,22 +54,29 @@ const showListItemDetails =  async(categoryID) =>{
                     </div>
                     <div class="card-body bg-white d-flex justify-content-around align-items-center">
                         <p class="text-dark"><img class="rounded rounded-circle" style="width: 40px; height: 40px" src="${author.img}" alt="..."> ${author.name ? author.name : 'N/A'}</p>
-                        <p class="text-dark"><i class="fa-regular fa-eye me-3"></i>${total_view}</p>
+                        <p class="text-dark"><i class="fa-regular fa-eye me-3"></i>${total_view ? total_view : 'N/A'}</p>
                         <p class="text-dark"><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star me-3"></i> ${rating.number}</p>
-                        <p class= "btn btn-primary"><i class="fa-solid fa-arrow-right"></i></p>
+                        <button type="button" class="btn btn-primary" onclick='showModal("${thumbnail_url}" , "${title}")' data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
         `;
         newsCards.appendChild(cadrDiv);
-        
-
     });
     }
-    
-
 }
 
-displayCategory()
 
+const showModal = (thumbnail_url, title) =>{
+    // console.log(thumbnail_url, title);
+    const modalDetails = document.getElementById('modal-details');
+    modalDetails.textContent = "";
+    modalDetails.innerHTML=`
+    <img src="${thumbnail_url}" />
+    <h5 class="modal-title">${title}</h5>
+    `;
+}
+displayCategory();
